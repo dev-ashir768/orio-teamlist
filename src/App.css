@@ -1,0 +1,129 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+.css-odfaqj-MuiButtonBase-root-MuiListItemButton-root.Mui-selected{
+  background-color: #c7e290 !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar-header h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.sidebar nav ul li.projects {
+  margin-bottom: 0;
+}
+
+.project-list {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.project-list .project {
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.project-list .project.selected {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.board-list {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.board-list .board {
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.board-list .board.selected {
+  background-color: var(--secondary-color);
+}
+
+/* Main Content Styles */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Board Styles */
+.board {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.columns {
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  min-width: 280px;
+  background-color: var(--card-color);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+/* ... (keep the rest of the CSS as before) ... */
+
