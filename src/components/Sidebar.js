@@ -491,12 +491,13 @@ function Sidebar({
             <List
               sx={{
                 backgroundColor: "#000c19",
+                backgroundImage: "url('/pattern-sidebar.png')",
                 height: "100%",
                 color: "#fff",
                 px: 1,
               }}
             >
-              <ListItemButton
+              {/* <ListItemButton
                 sx={{
                   mb: 1,
                   borderRadius: "10px",
@@ -512,7 +513,7 @@ function Sidebar({
                   sx={{ mr: 1.5, color: "#fff", width: "22px", height: "22px" }}
                 />
                 <ListItemText primary="Dashboard" />
-              </ListItemButton>
+              </ListItemButton> */}
 
               <ListItemButton
                 sx={{
@@ -536,7 +537,9 @@ function Sidebar({
             <Box
               sx={{
                 p: 2,
-                backgroundColor: "#000c19",
+                backgroundColor: "#000C19",
+                backgroundImage: "url('/pattern-sidebar.png')",
+                backgroundPosition: "bottom",
                 borderTop: "1px solid #1b506f",
                 display: "flex",
                 justifyContent: "center",
