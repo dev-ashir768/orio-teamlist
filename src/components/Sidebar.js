@@ -497,7 +497,7 @@ function Sidebar({
                 px: 1,
               }}
             >
-              {/* <ListItemButton
+              <ListItemButton
                 sx={{
                   mb: 1,
                   borderRadius: "10px",
@@ -512,8 +512,8 @@ function Sidebar({
                 <HomeOutlined
                   sx={{ mr: 1.5, color: "#fff", width: "22px", height: "22px" }}
                 />
-                <ListItemText primary="Dashboard" />
-              </ListItemButton> */}
+                <ListItemText primary="News Feed" />
+              </ListItemButton>
 
               <ListItemButton
                 sx={{
