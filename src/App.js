@@ -1,5 +1,3 @@
-
-
 import React, { useState, useCallback } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,8 +12,19 @@ import Header from "./components/Header";
 import Board from "./components/Board";
 import Login from "./components/Login";
 import { DataProvider, useData } from "./contexts/DataContext";
-import { ArrowBack, DeleteOutlineOutlined } from "@mui/icons-material";
-import { IconButton, Divider, Avatar, Stack } from "@mui/material";
+import {
+  ArrowBack,
+  DeleteOutlineOutlined,
+  MoreVert,
+} from "@mui/icons-material";
+import {
+  IconButton,
+  Divider,
+  Avatar,
+  Stack,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -106,20 +115,12 @@ function AppContent() {
   const [selectedBoardId, setSelectedBoardId] = useState(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
+  const [anchorEl, setAnchorEl] = React.useState({});
 
   const userProjects = getUserProjects();
   const userBoards = getUserBoards();
   const userColumns = getUserColumns();
   const userTasks = getUserTasks();
-
-  console.log("userProjects", userProjects);
-  console.log("userBoards", userBoards);
-  console.log("userColumns", userColumns);
-  console.log("userTasks", userTasks);
-  console.log("members", members);
-  console.log("labels", labels);
-  console.log("currentUser", currentUser);
-  console.log("addMember in App:", addMember);
 
   const selectedProject = userProjects.find((p) => p.id === selectedProjectId);
   const selectedBoard = userBoards.find((b) => b.id === selectedBoardId);
@@ -301,6 +302,11 @@ function AppContent() {
     setActiveSection("projects");
   }, []);
 
+  const handleBackToProjectBoards = useCallback(() => {
+    setActiveSection("project-boards");
+    setSelectedBoardId(null);
+  }, []);
+
   if (!currentUser) {
     return <Login onLogin={handleLogin} />;
   }
@@ -375,22 +381,24 @@ function AppContent() {
                     const status = column ? column.title : "Unknown";
 
                     // Get all members for the task
-                    const taskMembers = (task.members || []).map((memberId) =>
-                      members.find((m) => m.id === memberId) || {
-                        id: memberId,
-                        name: "Unknown",
-                        imageUrl:
-                          "https://www.pngkey.com/png/full/73-730434_04-dummy-avatar.png",
-                      }
+                    const taskMembers = (task.members || []).map(
+                      (memberId) =>
+                        members.find((m) => m.id === memberId) || {
+                          id: memberId,
+                          name: "Unknown",
+                          imageUrl:
+                            "https://www.pngkey.com/png/full/73-730434_04-dummy-avatar.png",
+                        }
                     );
 
                     // Get all labels for the task
-                    const taskLabels = (task.labels || []).map((labelId) =>
-                      labels.find((label) => label.id === labelId) || {
-                        id: labelId,
-                        name: "Unknown",
-                        color: "#474747",
-                      }
+                    const taskLabels = (task.labels || []).map(
+                      (labelId) =>
+                        labels.find((label) => label.id === labelId) || {
+                          id: labelId,
+                          name: "Unknown",
+                          color: "#474747",
+                        }
                     );
 
                     const dueDate = task.dueDate
@@ -494,7 +502,15 @@ function AppContent() {
                         <Typography variant="body1" sx={{ mt: 1 }}>
                           <strong>Deadline:</strong> {dueDate}
                         </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            mt: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
                           <strong>Priority:</strong>{" "}
                           {taskLabels.length > 0 ? (
                             <Stack direction="row" spacing={1}>
@@ -563,14 +579,36 @@ function AppContent() {
                           position: "relative",
                         }}
                       >
+                        {/* IconButton to trigger the dropdown */}
                         <IconButton
                           size="small"
                           sx={{ position: "absolute", top: 8, right: 8 }}
+                          onClick={(event) =>
+                            setAnchorEl({
+                              ...anchorEl,
+                              [project.id]: event.currentTarget,
+                            })
+                          }
                         >
-                          <DeleteOutlineOutlined
-                            onClick={() => handleDeleteProject(project.id)}
-                          />
+                          <MoreVert />
                         </IconButton>
+                        <Menu
+                          anchorEl={anchorEl[project.id]}
+                          open={Boolean(anchorEl[project.id])}
+                          onClose={() =>
+                            setAnchorEl({ ...anchorEl, [project.id]: null })
+                          }
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              handleDeleteProject(project.id);
+                              setAnchorEl({ ...anchorEl, [project.id]: null });
+                            }}
+                          >
+                            <DeleteOutlineOutlined sx={{ mr: 1 }} />
+                            Delete
+                          </MenuItem>
+                        </Menu>
                         <CardContent>
                           <svg
                             width="80"
@@ -742,7 +780,7 @@ function AppContent() {
             </Box>
           )}
 
-          {activeSection === "board" && selectedBoard && (
+          {/* {activeSection === "board" && selectedBoard && (
             <DragDropContext onDragEnd={onDragEnd}>
               <Board
                 key={`${selectedBoard.id}-${Date.now()}`}
@@ -764,6 +802,58 @@ function AppContent() {
                 onDeleteColumn={handleDeleteColumn}
               />
             </DragDropContext>
+          )} */}
+
+          {activeSection === "board" && selectedBoard && (
+            <Box
+              sx={{
+                padding: "20px",
+                backgroundColor: "#fff",
+                borderRadius: "12px",
+                flexGrow: 1,
+                height: "100%",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Button
+                  onClick={handleBackToProjectBoards}
+                  sx={{
+                    color: "#fff",
+                    mr: 2,
+                    backgroundColor: "#023250",
+                    "&:hover": { backgroundColor: "#01416e" },
+                  }}
+                >
+                  <ArrowBack />
+                </Button>
+                <Typography variant="h4" sx={{ color: "#000c19" }}>
+                  {selectedBoard.name}
+                </Typography>
+              </Box>
+              <DragDropContext style={{ height: "100%" }} onDragEnd={onDragEnd}>
+                <Board
+                  key={`${selectedBoard.id}-${Date.now()}`}
+                  board={selectedBoard}
+                  columns={userColumns.filter(
+                    (c) => c.boardId === selectedBoard.id
+                  )}
+                  tasks={userTasks.filter(
+                    (t) => t.boardId === selectedBoard.id
+                  )}
+                  onSaveBoard={handleSaveBoard}
+                  boardMembers={members.filter((m) =>
+                    selectedBoard.members.includes(m.id)
+                  )}
+                  availableLabels={labels}
+                  onAddTask={addTask}
+                  onUpdateTask={updateTask}
+                  onDeleteTask={deleteTask}
+                  onAddColumn={handleAddColumn}
+                  onUpdateColumn={handleUpdateColumn}
+                  onDeleteColumn={handleDeleteColumn}
+                />
+              </DragDropContext>
+            </Box>
           )}
         </Box>
       </Box>

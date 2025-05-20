@@ -26,9 +26,6 @@ import {
 } from "@mui/material";
 import {
   Close,
-  Delete as DeleteIcon,
-  Add as AddIcon,
-  DeleteSweep,
   DeleteTwoTone,
 } from "@mui/icons-material";
 
@@ -50,13 +47,6 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "center",
   padding: theme.spacing(2),
-}));
-
-const SideButton = styled(Button)(({ theme }) => ({
-  justifyContent: "flex-start",
-  marginBottom: theme.spacing(1),
-  width: "100%",
-  textAlign: "left",
 }));
 
 const StyledTextField = styled(TextField)({
@@ -277,7 +267,6 @@ function TaskPopup({
                 variant="contained"
                 color="primary"
                 onClick={handleAddChecklistItem}
-                // startIcon={<AddIcon />}
               >
                 Add
               </Button>
