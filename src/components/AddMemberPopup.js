@@ -16,7 +16,6 @@ function AddMemberPopup({ open, onClose, onAddMember }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  // Default imageUrl URL (not visible in UI)
   const defaultImageUrl =
     "https://www.pngkey.com/png/full/73-730434_04-dummy-avatar.png";
 
@@ -49,6 +48,7 @@ function AddMemberPopup({ open, onClose, onAddMember }) {
         email,
         password,
         imageUrl: defaultImageUrl,
+        right: false
       });
       onClose();
       resetForm();

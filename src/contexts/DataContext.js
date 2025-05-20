@@ -1,9 +1,35 @@
-// import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-// import { initializeApp } from 'firebase/app';
-// import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
-// import { initialProjects, initialBoards, initialColumns, initialTasks, dummyMembers, dummyLabels } from '../initialData.js';
-// import { CONFIG } from '../config';
-// import { debounce } from 'lodash';
+// import React, {
+//   createContext,
+//   useContext,
+//   useState,
+//   useEffect,
+//   useCallback,
+//   useRef,
+// } from "react";
+// import { initializeApp } from "firebase/app";
+// import {
+//   getFirestore,
+//   collection,
+//   doc,
+//   getDoc,
+//   getDocs,
+//   setDoc,
+//   updateDoc,
+//   deleteDoc,
+//   writeBatch,
+//   arrayUnion,
+//   arrayRemove,
+// } from "firebase/firestore";
+// import {
+//   initialProjects,
+//   initialBoards,
+//   initialColumns,
+//   initialTasks,
+//   dummyMembers,
+//   dummyLabels,
+// } from "../initialData.js";
+// import { CONFIG } from "../config";
+// import { debounce } from "lodash";
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBNuKT_D9NMlIzmE2sNfLI5-0JwHsRBPco",
@@ -11,7 +37,7 @@
 //   projectId: "teamlist-a2f1c",
 //   storageBucket: "teamlist-a2f1c.appspot.com",
 //   messagingSenderId: "401780644077",
-//   appId: "1:401780644077:web:0274114fb7b282ed5e94e4"
+//   appId: "1:401780644077:web:0274114fb7b282ed5e94e4",
 // };
 
 // const app = initializeApp(firebaseConfig);
@@ -36,76 +62,93 @@
 //     boards: [],
 //     columns: [],
 //     tasks: [],
+//     members: [],
 //   });
 //   const syncTimeoutRef = useRef(null);
 
-//   // Session timeout duration (e.g., 30 minutes in milliseconds)
-//   const SESSION_TIMEOUT = 5 * 60 * 60 * 1000; // 30 minutes
+//   const SESSION_TIMEOUT = 5 * 60 * 60 * 1000; // 5 hours
 
 //   const syncToFirebase = useCallback(async () => {
-//     if (dataSource !== 'firebase') return;
+//     if (dataSource !== "firebase") return;
 
-//     console.log('Starting sync to Firebase...');
+//     console.log("Starting sync to Firebase...");
 
 //     const batch = writeBatch(db);
 
-//     localCache.projects.forEach(project => {
-//       const projectRef = doc(db, 'projects', project.id);
+//     localCache.projects.forEach((project) => {
+//       const projectRef = doc(db, "projects", project.id);
 //       batch.set(projectRef, project, { merge: true });
 //     });
 
-//     localCache.boards.forEach(board => {
-//       const boardRef = doc(db, 'boards', board.id);
+//     localCache.boards.forEach((board) => {
+//       const boardRef = doc(db, "boards", board.id);
 //       batch.set(boardRef, board, { merge: true });
 //     });
 
-//     localCache.columns.forEach(column => {
-//       const columnRef = doc(db, 'columns', column.id);
+//     localCache.columns.forEach((column) => {
+//       const columnRef = doc(db, "columns", column.id);
 //       batch.set(columnRef, column, { merge: true });
 //     });
 
-//     localCache.tasks.forEach(task => {
-//       const taskRef = doc(db, 'tasks', task.id);
+//     localCache.tasks.forEach((task) => {
+//       const taskRef = doc(db, "tasks", task.id);
 //       batch.set(taskRef, task, { merge: true });
+//     });
+
+//     localCache.members.forEach((member) => {
+//       const memberRef = doc(db, "members", member.id);
+//       batch.set(memberRef, member, { merge: true });
 //     });
 
 //     try {
 //       await batch.commit();
-//       console.log('Sync to Firebase completed successfully');
+//       console.log("Sync to Firebase completed successfully");
 //     } catch (error) {
-//       console.error('Error syncing to Firebase:', error);
+//       console.error("Error syncing to Firebase:", error);
 //     }
 //   }, [dataSource, localCache]);
 
 //   const debouncedSyncToFirebase = debounce(syncToFirebase, 5000);
 
 //   const initializeColumns = useCallback((columns, tasks) => {
-//     return columns.map(column => ({
+//     return columns.map((column) => ({
 //       ...column,
-//       taskIds: tasks.filter(task => task.columnId === column.id).map(task => task.id),
-//       order: column.order || 0
+//       taskIds: tasks
+//         .filter((task) => task.columnId === column.id)
+//         .map((task) => task.id),
+//       order: column.order || 0,
 //     }));
 //   }, []);
 
 //   useEffect(() => {
 //     const fetchData = async () => {
-//       if (dataSource === 'firebase') {
+//       if (dataSource === "firebase") {
 //         try {
 //           const fetchCollection = async (collectionName) => {
 //             const snapshot = await getDocs(collection(db, collectionName));
-//             return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+//             return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 //           };
 
-//           const [fetchedProjects, fetchedBoards, fetchedColumns, fetchedTasks, fetchedMembers, fetchedLabels] = await Promise.all([
-//             fetchCollection('projects'),
-//             fetchCollection('boards'),
-//             fetchCollection('columns'),
-//             fetchCollection('tasks'),
-//             fetchCollection('members'),
-//             fetchCollection('labels')
+//           const [
+//             fetchedProjects,
+//             fetchedBoards,
+//             fetchedColumns,
+//             fetchedTasks,
+//             fetchedMembers,
+//             fetchedLabels,
+//           ] = await Promise.all([
+//             fetchCollection("projects"),
+//             fetchCollection("boards"),
+//             fetchCollection("columns"),
+//             fetchCollection("tasks"),
+//             fetchCollection("members"),
+//             fetchCollection("labels"),
 //           ]);
 
-//           const initializedColumns = initializeColumns(fetchedColumns, fetchedTasks);
+//           const initializedColumns = initializeColumns(
+//             fetchedColumns,
+//             fetchedTasks
+//           );
 
 //           setProjects(fetchedProjects);
 //           setBoards(fetchedBoards);
@@ -119,13 +162,41 @@
 //             boards: fetchedBoards,
 //             columns: initializedColumns,
 //             tasks: fetchedTasks,
+//             members: fetchedMembers,
 //           });
 
+//           // Sync currentUser with Firestore
+//           const persistedSession = JSON.parse(localStorage.getItem("userSession"));
+//           if (persistedSession && persistedSession.user) {
+//             const { user, loginTime } = persistedSession;
+//             const currentTime = Date.now();
+//             if (currentTime - loginTime < SESSION_TIMEOUT) {
+//               const userRef = doc(db, "members", user.id);
+//               const userDoc = await getDoc(userRef);
+//               if (userDoc.exists()) {
+//                 const updatedUser = { id: userDoc.id, ...userDoc.data() };
+//                 setCurrentUser(updatedUser);
+//                 localStorage.setItem(
+//                   "userSession",
+//                   JSON.stringify({ user: updatedUser, loginTime })
+//                 );
+//               } else {
+//                 localStorage.removeItem("userSession");
+//                 setCurrentUser(null);
+//               }
+//             } else {
+//               localStorage.removeItem("userSession");
+//               setCurrentUser(null);
+//             }
+//           }
 //         } catch (error) {
 //           console.error("Error fetching data from Firebase:", error);
 //         }
 //       } else {
-//         const initializedColumns = initializeColumns(initialColumns, initialTasks);
+//         const initializedColumns = initializeColumns(
+//           initialColumns,
+//           initialTasks
+//         );
 //         setProjects(initialProjects);
 //         setBoards(initialBoards);
 //         setColumns(initializedColumns);
@@ -137,31 +208,21 @@
 //           boards: initialBoards,
 //           columns: initializedColumns,
 //           tasks: initialTasks,
+//           members: dummyMembers,
 //         });
 //       }
 //     };
 
-//     // Load persisted user from localStorage
-//     const persistedSession = JSON.parse(localStorage.getItem('userSession'));
-//     if (persistedSession && persistedSession.user) {
-//       const { user, loginTime } = persistedSession;
-//       const currentTime = Date.now();
-//       if (currentTime - loginTime < SESSION_TIMEOUT) {
-//         setCurrentUser(user); // Restore user if session is still valid
-//       } else {
-//         localStorage.removeItem('userSession'); // Clear expired session
-//       }
-//     }
-
 //     fetchData();
-//   }, [dataSource, initializeColumns]);
+//   }, [dataSource, initializeColumns, SESSION_TIMEOUT]);
 
-//   // Auto-logout timer
 //   useEffect(() => {
 //     let logoutTimer;
 
 //     if (currentUser) {
-//       const loginTime = JSON.parse(localStorage.getItem('userSession'))?.loginTime || Date.now();
+//       const loginTime =
+//         JSON.parse(localStorage.getItem("userSession"))?.loginTime ||
+//         Date.now();
 //       const timeElapsed = Date.now() - loginTime;
 //       const timeRemaining = SESSION_TIMEOUT - timeElapsed;
 
@@ -170,11 +231,11 @@
 //           logout();
 //         }, timeRemaining);
 //       } else {
-//         logout(); // Immediately log out if session has already expired
+//         logout();
 //       }
 //     }
 
-//     return () => clearTimeout(logoutTimer); // Cleanup timer on unmount or user change
+//     return () => clearTimeout(logoutTimer);
 //   }, [currentUser]);
 
 //   const scheduleSync = useCallback(() => {
@@ -186,22 +247,53 @@
 //     }, 5000);
 //   }, [syncToFirebase]);
 
-//   // CRUD operations
+//   const addMember = async (memberData) => {
+//     const maxMemberId = members.reduce((max, member) => {
+//       const num = parseInt(member.id.replace("m", "") || "0");
+//       return Math.max(max, num);
+//     }, 0);
+//     const newMemberId = `m${maxMemberId + 1}`;
+
+//     const newMember = { ...memberData, id: newMemberId };
+//     setLocalCache((prev) => ({
+//       ...prev,
+//       members: [...prev.members, newMember],
+//     }));
+//     setMembers((prev) => [...prev, newMember]);
+
+//     if (dataSource === "firebase") {
+//       try {
+//         await setDoc(doc(db, "members", newMemberId), newMember);
+//         console.log("Member added to Firebase:", newMemberId);
+//       } catch (error) {
+//         console.error("Error adding member to Firebase:", error);
+//         setLocalCache((prev) => ({
+//           ...prev,
+//           members: prev.members.filter((m) => m.id !== newMemberId),
+//         }));
+//         setMembers((prev) => prev.filter((m) => m.id !== newMemberId));
+//         throw error;
+//       }
+//     }
+
+//     scheduleSync();
+//     return newMember;
+//   };
 
 //   const addProject = async (project) => {
 //     const newProject = { ...project, id: Date.now().toString() };
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       projects: [...prev.projects, newProject]
+//       projects: [...prev.projects, newProject],
 //     }));
-//     setProjects(prev => [...prev, newProject]);
+//     setProjects((prev) => [...prev, newProject]);
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await setDoc(doc(db, 'projects', newProject.id), newProject);
-//         console.log('Project added to Firebase:', newProject.id);
+//         await setDoc(doc(db, "projects", newProject.id), newProject);
+//         console.log("Project added to Firebase:", newProject.id);
 //       } catch (error) {
-//         console.error('Error adding project to Firebase:', error);
+//         console.error("Error adding project to Firebase:", error);
 //       }
 //     }
 
@@ -210,18 +302,22 @@
 //   };
 
 //   const updateProject = async (projectId, projectData) => {
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       projects: prev.projects.map(p => p.id === projectId ? { ...p, ...projectData } : p)
+//       projects: prev.projects.map((p) =>
+//         p.id === projectId ? { ...p, ...projectData } : p
+//       ),
 //     }));
-//     setProjects(prev => prev.map(p => p.id === projectId ? { ...p, ...projectData } : p));
+//     setProjects((prev) =>
+//       prev.map((p) => (p.id === projectId ? { ...p, ...projectData } : p))
+//     );
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await updateDoc(doc(db, 'projects', projectId), projectData);
-//         console.log('Project updated in Firebase:', projectId);
+//         await updateDoc(doc(db, "projects", projectId), projectData);
+//         console.log("Project updated in Firebase:", projectId);
 //       } catch (error) {
-//         console.error('Error updating project in Firebase:', error);
+//         console.error("Error updating project in Firebase:", error);
 //       }
 //     }
 
@@ -230,20 +326,20 @@
 //   };
 
 //   const deleteProject = async (projectId) => {
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       projects: prev.projects.filter(p => p.id !== projectId),
-//       boards: prev.boards.filter(b => b.projectId !== projectId)
+//       projects: prev.projects.filter((p) => p.id !== projectId),
+//       boards: prev.boards.filter((b) => b.projectId !== projectId),
 //     }));
-//     setProjects(prev => prev.filter(p => p.id !== projectId));
-//     setBoards(prev => prev.filter(b => b.projectId !== projectId));
+//     setProjects((prev) => prev.filter((p) => p.id !== projectId));
+//     setBoards((prev) => prev.filter((b) => b.projectId !== projectId));
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await deleteDoc(doc(db, 'projects', projectId));
-//         console.log('Project deleted from Firebase:', projectId);
+//         await deleteDoc(doc(db, "projects", projectId));
+//         console.log("Project deleted from Firebase:", projectId);
 //       } catch (error) {
-//         console.error('Error deleting project from Firebase:', error);
+//         console.error("Error deleting project from Firebase:", error);
 //       }
 //     }
 
@@ -253,18 +349,18 @@
 
 //   const addBoard = async (projectId, board) => {
 //     const newBoard = { ...board, projectId, id: Date.now().toString() };
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       boards: [...prev.boards, newBoard]
+//       boards: [...prev.boards, newBoard],
 //     }));
-//     setBoards(prev => [...prev, newBoard]);
+//     setBoards((prev) => [...prev, newBoard]);
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await setDoc(doc(db, 'boards', newBoard.id), newBoard);
-//         console.log('Board added to Firebase:', newBoard.id);
+//         await setDoc(doc(db, "boards", newBoard.id), newBoard);
+//         console.log("Board added to Firebase:", newBoard.id);
 //       } catch (error) {
-//         console.error('Error adding board to Firebase:', error);
+//         console.error("Error adding board to Firebase:", error);
 //       }
 //     }
 
@@ -273,18 +369,22 @@
 //   };
 
 //   const updateBoard = async (boardId, boardData) => {
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       boards: prev.boards.map(b => b.id === boardId ? { ...b, ...boardData } : b)
+//       boards: prev.boards.map((b) =>
+//         b.id === boardId ? { ...b, ...boardData } : b
+//       ),
 //     }));
-//     setBoards(prev => prev.map(b => b.id === boardId ? { ...b, ...boardData } : b));
+//     setBoards((prev) =>
+//       prev.map((b) => (b.id === boardId ? { ...b, ...boardData } : b))
+//     );
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await updateDoc(doc(db, 'boards', boardId), boardData);
-//         console.log('Board updated in Firebase:', boardId);
+//         await updateDoc(doc(db, "boards", boardId), boardData);
+//         console.log("Board updated in Firebase:", boardId);
 //       } catch (error) {
-//         console.error('Error updating board in Firebase:', error);
+//         console.error("Error updating board in Firebase:", error);
 //       }
 //     }
 
@@ -293,22 +393,22 @@
 //   };
 
 //   const deleteBoard = async (boardId) => {
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       boards: prev.boards.filter(b => b.id !== boardId),
-//       columns: prev.columns.filter(c => c.boardId !== boardId),
-//       tasks: prev.tasks.filter(t => t.boardId !== boardId)
+//       boards: prev.boards.filter((b) => b.id !== boardId),
+//       columns: prev.columns.filter((c) => c.boardId !== boardId),
+//       tasks: prev.tasks.filter((t) => t.boardId !== boardId),
 //     }));
-//     setBoards(prev => prev.filter(b => b.id !== boardId));
-//     setColumns(prev => prev.filter(c => c.boardId !== boardId));
-//     setTasks(prev => prev.filter(t => t.boardId !== boardId));
+//     setBoards((prev) => prev.filter((b) => b.id !== boardId));
+//     setColumns((prev) => prev.filter((c) => c.boardId !== boardId));
+//     setTasks((prev) => prev.filter((t) => t.boardId !== boardId));
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await deleteDoc(doc(db, 'boards', boardId));
-//         console.log('Board deleted from Firebase:', boardId);
+//         await deleteDoc(doc(db, "boards", boardId));
+//         console.log("Board deleted from Firebase:", boardId);
 //       } catch (error) {
-//         console.error('Error deleting board from Firebase:', error);
+//         console.error("Error deleting board from Firebase:", error);
 //       }
 //     }
 
@@ -317,27 +417,36 @@
 //   };
 
 //   const addColumn = async (boardId, column) => {
-//     const board = boards.find(b => b.id === boardId);
-//     const maxOrder = Math.max(...columns.filter(c => c.boardId === boardId).map(c => c.order), 0);
-//     const newColumn = { ...column, boardId, id: Date.now().toString(), taskIds: [], order: maxOrder + 1 };
+//     const board = boards.find((b) => b.id === boardId);
+//     const maxOrder = Math.max(
+//       ...columns.filter((c) => c.boardId === boardId).map((c) => c.order),
+//       0
+//     );
+//     const newColumn = {
+//       ...column,
+//       boardId,
+//       id: Date.now().toString(),
+//       taskIds: [],
+//       order: maxOrder + 1,
+//     };
 
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       columns: [...prev.columns, newColumn]
+//       columns: [...prev.columns, newColumn],
 //     }));
-//     setColumns(prev => [...prev, newColumn]);
+//     setColumns((prev) => [...prev, newColumn]);
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
 //         const batch = writeBatch(db);
-//         batch.set(doc(db, 'columns', newColumn.id), newColumn);
-//         batch.update(doc(db, 'boards', boardId), {
-//           columnIds: arrayUnion(newColumn.id)
+//         batch.set(doc(db, "columns", newColumn.id), newColumn);
+//         batch.update(doc(db, "boards", boardId), {
+//           columnIds: arrayUnion(newColumn.id),
 //         });
 //         await batch.commit();
-//         console.log('Column added to Firebase:', newColumn.id);
+//         console.log("Column added to Firebase:", newColumn.id);
 //       } catch (error) {
-//         console.error('Error adding column to Firebase:', error);
+//         console.error("Error adding column to Firebase:", error);
 //       }
 //     }
 
@@ -346,18 +455,22 @@
 //   };
 
 //   const updateColumn = async (columnId, columnData) => {
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       columns: prev.columns.map(c => c.id === columnId ? { ...c, ...columnData } : c)
+//       columns: prev.columns.map((c) =>
+//         c.id === columnId ? { ...c, ...columnData } : c
+//       ),
 //     }));
-//     setColumns(prev => prev.map(c => c.id === columnId ? { ...c, ...columnData } : c));
+//     setColumns((prev) =>
+//       prev.map((c) => (c.id === columnId ? { ...c, ...columnData } : c))
+//     );
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await updateDoc(doc(db, 'columns', columnId), columnData);
-//         console.log('Column updated in Firebase:', columnId);
+//         await updateDoc(doc(db, "columns", columnId), columnData);
+//         console.log("Column updated in Firebase:", columnId);
 //       } catch (error) {
-//         console.error('Error updating column in Firebase:', error);
+//         console.error("Error updating column in Firebase:", error);
 //       }
 //     }
 
@@ -366,39 +479,42 @@
 //   };
 
 //   const deleteColumn = async (columnId) => {
-//     const columnToDelete = columns.find(c => c.id === columnId);
+//     const columnToDelete = columns.find((c) => c.id === columnId);
 //     if (!columnToDelete) {
-//       console.error('Column not found:', columnId);
+//       console.error("Column not found:", columnId);
 //       return false;
 //     }
 
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       columns: prev.columns.filter(c => c.id !== columnId),
-//       tasks: prev.tasks.filter(t => t.columnId !== columnId)
+//       columns: prev.columns.filter((c) => c.id !== columnId),
+//       tasks: prev.tasks.filter((t) => t.columnId !== columnId),
 //     }));
-//     setColumns(prev => prev.filter(c => c.id !== columnId));
-//     setTasks(prev => prev.filter(t => t.columnId !== columnId));
+//     setColumns((prev) => prev.filter((c) => c.id !== columnId));
+//     setTasks((prev) => prev.filter((t) => t.columnId !== columnId));
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
 //         const batch = writeBatch(db);
 
-//         batch.delete(doc(db, 'columns', columnId));
+//         batch.delete(doc(db, "columns", columnId));
 
-//         batch.update(doc(db, 'boards', columnToDelete.boardId), {
-//           columnIds: arrayRemove(columnId)
+//         batch.update(doc(db, "boards", columnToDelete.boardId), {
+//           columnIds: arrayRemove(columnId),
 //         });
 
-//         const tasksToDelete = tasks.filter(t => t.columnId === columnId);
-//         tasksToDelete.forEach(task => {
-//           batch.delete(doc(db, 'tasks', task.id));
+//         const tasksToDelete = tasks.filter((t) => t.columnId === columnId);
+//         tasksToDelete.forEach((task) => {
+//           batch.delete(doc(db, "tasks", task.id));
 //         });
 
 //         await batch.commit();
-//         console.log('Column and associated tasks deleted from Firebase:', columnId);
+//         console.log(
+//           "Column and associated tasks deleted from Firebase:",
+//           columnId
+//         );
 //       } catch (error) {
-//         console.error('Error deleting column from Firebase:', error);
+//         console.error("Error deleting column from Firebase:", error);
 //         return false;
 //       }
 //     }
@@ -409,31 +525,33 @@
 
 //   const addTask = async (columnId, task) => {
 //     const newTask = { ...task, columnId, id: Date.now().toString() };
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
 //       tasks: [...prev.tasks, newTask],
-//       columns: prev.columns.map(column =>
+//       columns: prev.columns.map((column) =>
+//         column.id === columnId
+//           ? { ...column, taskIds: [...(column.taskIds || []), newTask.id] }
+//           : column
+//       ),
+//     }));
+//     setTasks((prev) => [...prev, newTask]);
+//     setColumns((prev) =>
+//       prev.map((column) =>
 //         column.id === columnId
 //           ? { ...column, taskIds: [...(column.taskIds || []), newTask.id] }
 //           : column
 //       )
-//     }));
-//     setTasks(prev => [...prev, newTask]);
-//     setColumns(prev => prev.map(column =>
-//       column.id === columnId
-//         ? { ...column, taskIds: [...(column.taskIds || []), newTask.id] }
-//         : column
-//     ));
+//     );
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         await setDoc(doc(db, 'tasks', newTask.id), newTask);
-//         await updateDoc(doc(db, 'columns', columnId), {
-//           taskIds: arrayUnion(newTask.id)
+//         await setDoc(doc(db, "tasks", newTask.id), newTask);
+//         await updateDoc(doc(db, "columns", columnId), {
+//           taskIds: arrayUnion(newTask.id),
 //         });
-//         console.log('Task added to Firebase:', newTask.id);
+//         console.log("Task added to Firebase:", newTask.id);
 //       } catch (error) {
-//         console.error('Error adding task to Firebase:', error);
+//         console.error("Error adding task to Firebase:", error);
 //       }
 //     }
 
@@ -442,67 +560,82 @@
 //   };
 
 //   const updateTask = async (taskId, taskData) => {
-//     console.log('Updating task:', taskId, taskData);
+//     console.log("Updating task:", taskId, taskData);
 
-//     // Get the current task data before updating
-//     const currentTask = tasks.find(t => t.id === taskId);
+//     const currentTask = tasks.find((t) => t.id === taskId);
 
-//     // Optimistic update
-//     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, ...taskData } : t));
-//     setLocalCache(prev => ({
+//     setTasks((prev) =>
+//       prev.map((t) => (t.id === taskId ? { ...t, ...taskData } : t))
+//     );
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       tasks: prev.tasks.map(t => t.id === taskId ? { ...t, ...taskData } : t)
+//       tasks: prev.tasks.map((t) =>
+//         t.id === taskId ? { ...t, ...taskData } : t
+//       ),
 //     }));
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         const taskRef = doc(db, 'tasks', taskId);
+//         const taskRef = doc(db, "tasks", taskId);
 //         await updateDoc(taskRef, taskData);
-//         console.log('Task updated in Firebase:', taskId);
+//         console.log("Task updated in Firebase:", taskId);
 
-//         // If the column has changed, update the columns in Firebase
 //         if (taskData.columnId && taskData.columnId !== currentTask.columnId) {
 //           const batch = writeBatch(db);
 
-//           const oldColumn = localCache.columns.find(c => c.taskIds.includes(taskId));
-//           const newColumn = localCache.columns.find(c => c.id === taskData.columnId);
+//           const oldColumn = localCache.columns.find((c) =>
+//             c.taskIds.includes(taskId)
+//           );
+//           const newColumn = localCache.columns.find(
+//             (c) => c.id === taskData.columnId
+//           );
 
 //           if (oldColumn && oldColumn.id !== newColumn.id) {
-//             batch.update(doc(db, 'columns', oldColumn.id), {
-//               taskIds: arrayRemove(taskId)
+//             batch.update(doc(db, "columns", oldColumn.id), {
+//               taskIds: arrayRemove(taskId),
 //             });
 //           }
 
 //           if (newColumn) {
-//             batch.update(doc(db, 'columns', newColumn.id), {
-//               taskIds: arrayUnion(taskId)
+//             batch.update(doc(db, "columns", newColumn.id), {
+//               taskIds: arrayUnion(taskId),
 //             });
 //           }
 
 //           await batch.commit();
-//           console.log('Columns updated in Firebase');
+//           console.log("Columns updated in Firebase");
 //         }
 
-//         // Update columns in local state if needed
 //         if (taskData.columnId && taskData.columnId !== currentTask.columnId) {
-//           setColumns(prev => prev.map(column => {
-//             if (column.taskIds.includes(taskId) && column.id !== taskData.columnId) {
-//               return { ...column, taskIds: column.taskIds.filter(id => id !== taskId) };
-//             }
-//             if (column.id === taskData.columnId && !column.taskIds.includes(taskId)) {
-//               return { ...column, taskIds: [...column.taskIds, taskId] };
-//             }
-//             return column;
-//           }));
+//           setColumns((prev) =>
+//             prev.map((column) => {
+//               if (
+//                 column.taskIds.includes(taskId) &&
+//                 column.id !== taskData.columnId
+//               ) {
+//                 return {
+//                   ...column,
+//                   taskIds: column.taskIds.filter((id) => id !== taskId),
+//                 };
+//               }
+//               if (
+//                 column.id === taskData.columnId &&
+//                 !column.taskIds.includes(taskId)
+//               ) {
+//                 return { ...column, taskIds: [...column.taskIds, taskId] };
+//               }
+//               return column;
+//             })
+//           );
 //         }
-
 //       } catch (error) {
-//         console.error('Error updating task in Firebase:', error);
-//         // Revert local changes if Firebase update fails
-//         setTasks(prev => prev.map(t => t.id === taskId ? currentTask : t));
-//         setLocalCache(prev => ({
+//         console.error("Error updating task in Firebase:", error);
+//         setTasks((prev) =>
+//           prev.map((t) => (t.id === taskId ? currentTask : t))
+//         );
+//         setLocalCache((prev) => ({
 //           ...prev,
-//           tasks: prev.tasks.map(t => t.id === taskId ? currentTask : t)
+//           tasks: prev.tasks.map((t) => (t.id === taskId ? currentTask : t)),
 //         }));
 //         return false;
 //       }
@@ -512,54 +645,61 @@
 //     return true;
 //   };
 
-//   const moveTask = async (taskId, sourceColumnId, destinationColumnId, newIndex) => {
-//     const task = tasks.find(t => t.id === taskId);
+//   const moveTask = async (
+//     taskId,
+//     sourceColumnId,
+//     destinationColumnId,
+//     newIndex
+//   ) => {
+//     const task = tasks.find((t) => t.id === taskId);
 //     const updatedTask = { ...task, columnId: destinationColumnId };
 
-//     // Optimistic update
-//     setTasks(prev => prev.map(t => t.id === taskId ? updatedTask : t));
-//     setColumns(prev => prev.map(column => {
-//       if (column.id === sourceColumnId) {
-//         return { ...column, taskIds: column.taskIds.filter(id => id !== taskId) };
-//       }
-//       if (column.id === destinationColumnId) {
-//         const newTaskIds = [...column.taskIds];
-//         newTaskIds.splice(newIndex, 0, taskId);
-//         return { ...column, taskIds: newTaskIds };
-//       }
-//       return column;
-//     }));
+//     setTasks((prev) => prev.map((t) => (t.id === taskId ? updatedTask : t)));
+//     setColumns((prev) =>
+//       prev.map((column) => {
+//         if (column.id === sourceColumnId) {
+//           return {
+//             ...column,
+//             taskIds: column.taskIds.filter((id) => id !== taskId),
+//           };
+//         }
+//         if (column.id === destinationColumnId) {
+//           const newTaskIds = [...column.taskIds];
+//           newTaskIds.splice(newIndex, 0, taskId);
+//           return { ...column, taskIds: newTaskIds };
+//         }
+//         return column;
+//       })
+//     );
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
 //         const batch = writeBatch(db);
 
-//         // Update task
-//         batch.update(doc(db, 'tasks', taskId), { columnId: destinationColumnId });
-
-//         // Update source column
-//         batch.update(doc(db, 'columns', sourceColumnId), {
-//           taskIds: arrayRemove(taskId)
+//         batch.update(doc(db, "tasks", taskId), {
+//           columnId: destinationColumnId,
 //         });
 
-//         // Update destination column
-//         const destColumn = columns.find(c => c.id === destinationColumnId);
+//         batch.update(doc(db, "columns", sourceColumnId), {
+//           taskIds: arrayRemove(taskId),
+//         });
+
+//         const destColumn = columns.find((c) => c.id === destinationColumnId);
 //         const newTaskIds = [...destColumn.taskIds];
 //         newTaskIds.splice(newIndex, 0, taskId);
-//         batch.update(doc(db, 'columns', destinationColumnId), {
-//           taskIds: newTaskIds
+//         batch.update(doc(db, "columns", destinationColumnId), {
+//           taskIds: newTaskIds,
 //         });
 
 //         await batch.commit();
-//         console.log('Task moved in Firebase');
+//         console.log("Task moved in Firebase");
 //       } catch (error) {
-//         console.error('Error moving task in Firebase:', error);
-//         // Revert optimistic update if Firebase update fails
-//         setTasks(prev => prev.map(t => t.id === taskId ? task : t));
-//         setColumns(prev => {
-//           const sourceColumn = prev.find(c => c.id === sourceColumnId);
-//           const destColumn = prev.find(c => c.id === destinationColumnId);
-//           return prev.map(column => {
+//         console.error("Error moving task in Firebase:", error);
+//         setTasks((prev) => prev.map((t) => (t.id === taskId ? task : t)));
+//         setColumns((prev) => {
+//           const sourceColumn = prev.find((c) => c.id === sourceColumnId);
+//           const destColumn = prev.find((c) => c.id === destinationColumnId);
+//           return prev.map((column) => {
 //             if (column.id === sourceColumnId) {
 //               return { ...column, taskIds: sourceColumn.taskIds };
 //             }
@@ -569,18 +709,26 @@
 //             return column;
 //           });
 //         });
-//         setLocalCache(prev => ({
+//         setLocalCache((prev) => ({
 //           ...prev,
-//           tasks: prev.tasks.map(t => t.id === taskId ? task : t),
-//           columns: prev.columns.map(column => {
+//           tasks: prev.tasks.map((t) => (t.id === taskId ? task : t)),
+//           columns: prev.columns.map((column) => {
 //             if (column.id === sourceColumnId) {
-//               return { ...column, taskIds: prev.columns.find(c => c.id === sourceColumnId).taskIds };
+//               return {
+//                 ...column,
+//                 taskIds: prev.columns.find((c) => c.id === sourceColumnId)
+//                   .taskIds,
+//               };
 //             }
 //             if (column.id === destinationColumnId) {
-//               return { ...column, taskIds: prev.columns.find(c => c.id === destinationColumnId).taskIds };
+//               return {
+//                 ...column,
+//                 taskIds: prev.columns.find((c) => c.id === destinationColumnId)
+//                   .taskIds,
+//               };
 //             }
 //             return column;
-//           })
+//           }),
 //         }));
 //         return false;
 //       }
@@ -591,131 +739,128 @@
 //   };
 
 //   const deleteTask = async (taskId) => {
-//     console.log('Attempting to delete task:', taskId);
+//     console.log("Attempting to delete task:", taskId);
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       try {
-//         // Find the column containing this task in the local cache
-//         const columnWithTask = localCache.columns.find(c => c.taskIds.includes(taskId));
+//         const columnWithTask = localCache.columns.find((c) =>
+//           c.taskIds.includes(taskId)
+//         );
 
-//         // Start a batch write
 //         const batch = writeBatch(db);
 
-//         // Delete the task from Firebase
-//         const taskRef = doc(db, 'tasks', taskId);
+//         const taskRef = doc(db, "tasks", taskId);
 //         batch.delete(taskRef);
 
 //         if (columnWithTask) {
-//           // Update the column in Firebase to remove the task ID
-//           const columnRef = doc(db, 'columns', columnWithTask.id);
+//           const columnRef = doc(db, "columns", columnWithTask.id);
 //           batch.update(columnRef, {
-//             taskIds: arrayRemove(taskId)
+//             taskIds: arrayRemove(taskId),
 //           });
 //         }
 
-//         // Commit the batch
 //         await batch.commit();
-//         console.log('Task and column references updated in Firebase');
+//         console.log("Task and column references updated in Firebase");
 //       } catch (error) {
-//         console.error('Error deleting task from Firebase:', error);
+//         console.error("Error deleting task from Firebase:", error);
 //         return false;
 //       }
 //     }
 
-//     // Update local cache
-//     setLocalCache(prev => {
-//       const updatedColumns = prev.columns.map(column => ({
+//     setLocalCache((prev) => {
+//       const updatedColumns = prev.columns.map((column) => ({
 //         ...column,
-//         taskIds: column.taskIds.filter(id => id !== taskId)
+//         taskIds: column.taskIds.filter((id) => id !== taskId),
 //       }));
 //       return {
 //         ...prev,
-//         tasks: prev.tasks.filter(t => t.id !== taskId),
-//         columns: updatedColumns
+//         tasks: prev.tasks.filter((t) => t.id !== taskId),
+//         columns: updatedColumns,
 //       };
 //     });
 
-//     // Update React state
-//     setTasks(prev => prev.filter(t => t.id !== taskId));
-//     setColumns(prev => prev.map(column => ({
-//       ...column,
-//       taskIds: column.taskIds.filter(id => id !== taskId)
-//     })));
+//     setTasks((prev) => prev.filter((t) => t.id !== taskId));
+//     setColumns((prev) =>
+//       prev.map((column) => ({
+//         ...column,
+//         taskIds: column.taskIds.filter((id) => id !== taskId),
+//       }))
+//     );
 
-//     console.log('Local state updated after task deletion');
+//     console.log("Local state updated after task deletion");
 //     scheduleSync();
 //     return true;
 //   };
 
-// /// new reorder tasks in column function
+//   const reorderTasksInColumn = async (columnId, newTaskOrder) => {
+//     console.log("Reordering tasks in column:", columnId, newTaskOrder);
 
-// const reorderTasksInColumn = async (columnId, newTaskOrder) => {
-//   console.log('Reordering tasks in column:', columnId, newTaskOrder);
+//     setColumns((prev) =>
+//       prev.map((column) =>
+//         column.id === columnId ? { ...column, taskIds: newTaskOrder } : column
+//       )
+//     );
 
-//   // Optimistic update
-//   setColumns(prev => prev.map(column =>
-//     column.id === columnId ? { ...column, taskIds: newTaskOrder } : column
-//   ));
+//     setLocalCache((prev) => ({
+//       ...prev,
+//       columns: prev.columns.map((column) =>
+//         column.id === columnId ? { ...column, taskIds: newTaskOrder } : column
+//       ),
+//     }));
 
-//   setLocalCache(prev => ({
-//     ...prev,
-//     columns: prev.columns.map(column =>
-//       column.id === columnId ? { ...column, taskIds: newTaskOrder } : column
-//     )
-//   }));
-
-//   if (dataSource === 'firebase') {
-//     try {
-//       await updateDoc(doc(db, 'columns', columnId), { taskIds: newTaskOrder });
-//       console.log('Tasks reordered in Firebase for column:', columnId);
-//     } catch (error) {
-//       console.error('Error reordering tasks in Firebase:', error);
-//       // Revert optimistic update if Firebase update fails
-//       const originalColumn = columns.find(c => c.id === columnId);
-//       setColumns(prev => prev.map(column =>
-//         column.id === columnId ? originalColumn : column
-//       ));
-//       setLocalCache(prev => ({
-//         ...prev,
-//         columns: prev.columns.map(column =>
-//           column.id === columnId ? originalColumn : column
-//         )
-//       }));
-//       return false;
+//     if (dataSource === "firebase") {
+//       try {
+//         await updateDoc(doc(db, "columns", columnId), {
+//           taskIds: newTaskOrder,
+//         });
+//         console.log("Tasks reordered in Firebase for column:", columnId);
+//       } catch (error) {
+//         console.error("Error reordering tasks in Firebase:", error);
+//         const originalColumn = columns.find((c) => c.id === columnId);
+//         setColumns((prev) =>
+//           prev.map((column) =>
+//             column.id === columnId ? originalColumn : column
+//           )
+//         );
+//         setLocalCache((prev) => ({
+//           ...prev,
+//           columns: prev.columns.map((column) =>
+//             column.id === columnId ? originalColumn : column
+//           ),
+//         }));
+//         return false;
+//       }
 //     }
-//   }
 
-//   debouncedSyncToFirebase();
-//   return true;
-// };
-
-// ////
+//     debouncedSyncToFirebase();
+//     return true;
+//   };
 
 //   const reorderColumns = async (boardId, newOrder) => {
 //     const updatedColumns = columns
-//       .filter(column => column.boardId === boardId)
+//       .filter((column) => column.boardId === boardId)
 //       .map((column, index) => ({ ...column, order: newOrder[index].order }));
 
-//     setLocalCache(prev => ({
+//     setLocalCache((prev) => ({
 //       ...prev,
-//       columns: prev.columns.map(c =>
-//         updatedColumns.find(uc => uc.id === c.id) || c
-//       )
+//       columns: prev.columns.map(
+//         (c) => updatedColumns.find((uc) => uc.id === c.id) || c
+//       ),
 //     }));
-//     setColumns(prev => prev.map(c =>
-//       updatedColumns.find(uc => uc.id === c.id) || c
-//     ));
+//     setColumns((prev) =>
+//       prev.map((c) => updatedColumns.find((uc) => uc.id === c.id) || c)
+//     );
 
-//     if (dataSource === 'firebase') {
+//     if (dataSource === "firebase") {
 //       const batch = writeBatch(db);
 //       try {
-//         updatedColumns.forEach(column => {
-//           batch.update(doc(db, 'columns', column.id), { order: column.order });
+//         updatedColumns.forEach((column) => {
+//           batch.update(doc(db, "columns", column.id), { order: column.order });
 //         });
 //         await batch.commit();
-//         console.log('Columns reordered in Firebase');
+//         console.log("Columns reordered in Firebase");
 //       } catch (error) {
-//         console.error('Error reordering columns in Firebase:', error);
+//         console.error("Error reordering columns in Firebase:", error);
 //         return false;
 //       }
 //     }
@@ -724,55 +869,97 @@
 //     return true;
 //   };
 
-//   const login = (user) => {
+//   const login = async (user) => {
+//     if (dataSource === "firebase") {
+//       try {
+//         const userRef = doc(db, "members", user.id);
+//         const userDoc = await getDoc(userRef);
+//         if (userDoc.exists()) {
+//           user = { id: userDoc.id, ...userDoc.data() };
+//         }
+//       } catch (error) {
+//         console.error("Error fetching user during login:", error);
+//       }
+//     }
 //     const sessionData = {
 //       user,
 //       loginTime: Date.now(),
 //     };
 //     setCurrentUser(user);
-//     localStorage.setItem('userSession', JSON.stringify(sessionData));
+//     localStorage.setItem("userSession", JSON.stringify(sessionData));
 //   };
 
 //   const logout = () => {
 //     setCurrentUser(null);
-//     localStorage.removeItem('userSession');
+//     localStorage.removeItem("userSession");
 //   };
 
 //   const getUserProjects = useCallback(() => {
-//     return projects.filter(project =>
-//       currentUser?.email === 'superadmin@example.com' || project.members.includes(currentUser?.id)
+//     if (
+//       currentUser?.right === true ||
+//       currentUser?.email === "superadmin@getorio.com"
+//     ) {
+//       return projects; // Return all projects for superadmin
+//     }
+//     return projects.filter((project) =>
+//       project.members.includes(currentUser?.id)
 //     );
 //   }, [projects, currentUser]);
 
 //   const getUserBoards = useCallback(() => {
+//     if (
+//       currentUser?.right === true ||
+//       currentUser?.email === "superadmin@getorio.com"
+//     ) {
+//       return boards; // Return all boards for superadmin
+//     }
 //     const userProjects = getUserProjects();
-//     return boards.filter(board =>
-//       userProjects.some(project => project.id === board.projectId) &&
-//       (currentUser?.email === 'superadmin@example.com' || board.members.includes(currentUser?.id))
+//     return boards.filter(
+//       (board) =>
+//         userProjects.some((project) => project.id === board.projectId) &&
+//         board.members.includes(currentUser?.id)
 //     );
 //   }, [boards, getUserProjects, currentUser]);
 
 //   const getUserColumns = useCallback(() => {
+//     if (
+//       currentUser?.right === true ||
+//       currentUser?.email === "superadmin@getorio.com"
+//     ) {
+//       return columns; // Return all columns for superadmin
+//     }
 //     const userBoards = getUserBoards();
-//     return columns.filter(column =>
-//       userBoards.some(board => board.id === column.boardId)
+//     return columns.filter((column) =>
+//       userBoards.some((board) => board.id === column.boardId)
 //     );
-//   }, [columns, getUserBoards]);
+//   }, [columns, getUserBoards, currentUser]);
 
 //   const getUserTasks = useCallback(() => {
+//     if (
+//       currentUser?.right === true ||
+//       currentUser?.email === "superadmin@getorio.com"
+//     ) {
+//       return tasks; // Return all tasks for superadmin
+//     }
 //     const userColumns = getUserColumns();
-//     return tasks.filter(task =>
-//       userColumns.some(column => column.id === task.columnId)
+//     return tasks.filter((task) =>
+//       userColumns.some((column) => column.id === task.columnId)
 //     );
-//   }, [tasks, getUserColumns]);
+//   }, [tasks, getUserColumns, currentUser]);
 
-//   const getUserColumnsForBoard = useCallback((boardId) => {
-//     return columns.filter(column => column.boardId === boardId);
-//   }, [columns]);
+//   const getUserColumnsForBoard = useCallback(
+//     (boardId) => {
+//       return columns.filter((column) => column.boardId === boardId);
+//     },
+//     [columns]
+//   );
 
-//   const getUserTasksForBoard = useCallback((boardId) => {
-//     return tasks.filter(task => task.boardId === boardId);
-//   }, [tasks]);
+//   const getUserTasksForBoard = useCallback(
+//     (boardId) => {
+//       return tasks.filter((task) => task.boardId === boardId);
+//     },
+//     [tasks]
+//   );
 
 //   const value = {
 //     projects,
@@ -782,6 +969,7 @@
 //     members,
 //     labels,
 //     currentUser,
+//     addMember,
 //     addProject,
 //     updateProject,
 //     deleteProject,
@@ -876,7 +1064,7 @@ export const DataProvider = ({ children }) => {
     boards: [],
     columns: [],
     tasks: [],
-    members: [], // Added members to the local cache
+    members: [],
   });
   const syncTimeoutRef = useRef(null);
 
@@ -978,6 +1166,33 @@ export const DataProvider = ({ children }) => {
             tasks: fetchedTasks,
             members: fetchedMembers,
           });
+
+          // Sync currentUser with Firestore
+          const persistedSession = JSON.parse(
+            localStorage.getItem("userSession")
+          );
+          if (persistedSession && persistedSession.user) {
+            const { user, loginTime } = persistedSession;
+            const currentTime = Date.now();
+            if (currentTime - loginTime < SESSION_TIMEOUT) {
+              const userRef = doc(db, "members", user.id);
+              const userDoc = await getDoc(userRef);
+              if (userDoc.exists()) {
+                const updatedUser = { id: userDoc.id, ...userDoc.data() };
+                setCurrentUser(updatedUser);
+                localStorage.setItem(
+                  "userSession",
+                  JSON.stringify({ user: updatedUser, loginTime })
+                );
+              } else {
+                localStorage.removeItem("userSession");
+                setCurrentUser(null);
+              }
+            } else {
+              localStorage.removeItem("userSession");
+              setCurrentUser(null);
+            }
+          }
         } catch (error) {
           console.error("Error fetching data from Firebase:", error);
         }
@@ -1002,19 +1217,8 @@ export const DataProvider = ({ children }) => {
       }
     };
 
-    const persistedSession = JSON.parse(localStorage.getItem("userSession"));
-    if (persistedSession && persistedSession.user) {
-      const { user, loginTime } = persistedSession;
-      const currentTime = Date.now();
-      if (currentTime - loginTime < SESSION_TIMEOUT) {
-        setCurrentUser(user);
-      } else {
-        localStorage.removeItem("userSession");
-      }
-    }
-
     fetchData();
-  }, [dataSource, initializeColumns]);
+  }, [dataSource, initializeColumns, SESSION_TIMEOUT]);
 
   useEffect(() => {
     let logoutTimer;
@@ -1047,14 +1251,12 @@ export const DataProvider = ({ children }) => {
     }, 5000);
   }, [syncToFirebase]);
 
-  // Updated addMember function to generate sequential IDs like m8
   const addMember = async (memberData) => {
-    // Find the highest existing member ID (e.g., m7)
     const maxMemberId = members.reduce((max, member) => {
       const num = parseInt(member.id.replace("m", "") || "0");
       return Math.max(max, num);
     }, 0);
-    const newMemberId = `m${maxMemberId + 1}`; // Generate next ID (e.g., m8)
+    const newMemberId = `m${maxMemberId + 1}`;
 
     const newMember = { ...memberData, id: newMemberId };
     setLocalCache((prev) => ({
@@ -1169,6 +1371,7 @@ export const DataProvider = ({ children }) => {
     scheduleSync();
     return newBoard;
   };
+
   const updateBoard = async (boardId, boardData) => {
     setLocalCache((prev) => ({
       ...prev,
@@ -1670,7 +1873,18 @@ export const DataProvider = ({ children }) => {
     return true;
   };
 
-  const login = (user) => {
+  const login = async (user) => {
+    if (dataSource === "firebase") {
+      try {
+        const userRef = doc(db, "members", user.id);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          user = { id: userDoc.id, ...userDoc.data() };
+        }
+      } catch (error) {
+        console.error("Error fetching user during login:", error);
+      }
+    }
     const sessionData = {
       user,
       loginTime: Date.now(),
@@ -1684,37 +1898,89 @@ export const DataProvider = ({ children }) => {
     localStorage.removeItem("userSession");
   };
 
+  const checkUserRights = useCallback(
+    async (action) => {
+      if (!currentUser) {
+        console.log("No user logged in");
+        return false;
+      }
+
+      let user = currentUser;
+      if (dataSource === "firebase") {
+        try {
+          const userRef = doc(db, "members", currentUser.id);
+          const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            user = { id: userDoc.id, ...userDoc.data() };
+            const sessionData = {
+              user,
+              loginTime: Date.now(),
+            };
+            localStorage.setItem("userSession", JSON.stringify(sessionData));
+            setCurrentUser(user);
+          } else {
+            console.log("User not found in Firestore");
+            return false;
+          }
+        } catch (error) {
+          console.error("Error fetching user from Firestore:", error);
+          return false;
+        }
+      }
+
+      const hasRights = user.right === true;
+
+      if (!hasRights) {
+        console.log("User does not have sufficient rights for this action");
+        return false;
+      }
+
+      console.log(`Executing action: ${action} for user ${user.name}`);
+      return true;
+    },
+    [currentUser, dataSource, db]
+  );
+
   const getUserProjects = useCallback(() => {
-    return projects.filter(
-      (project) =>
-        currentUser?.email === "superadmin@example.com" ||
-        project.members.includes(currentUser?.id)
+    if (currentUser?.right === true) {
+      return projects; // Return all projects for users with right: true
+    }
+    return projects.filter((project) =>
+      project.members.includes(currentUser?.id)
     );
   }, [projects, currentUser]);
 
   const getUserBoards = useCallback(() => {
+    if (currentUser?.right === true) {
+      return boards; // Return all boards for users with right: true
+    }
     const userProjects = getUserProjects();
     return boards.filter(
       (board) =>
         userProjects.some((project) => project.id === board.projectId) &&
-        (currentUser?.email === "superadmin@example.com" ||
-          board.members.includes(currentUser?.id))
+        board.members.includes(currentUser?.id)
     );
   }, [boards, getUserProjects, currentUser]);
 
   const getUserColumns = useCallback(() => {
+    if (currentUser?.right === true) {
+      return columns; // Return all columns for users with right: true
+    }
     const userBoards = getUserBoards();
     return columns.filter((column) =>
       userBoards.some((board) => board.id === column.boardId)
     );
-  }, [columns, getUserBoards]);
+  }, [columns, getUserBoards, currentUser]);
 
   const getUserTasks = useCallback(() => {
+    if (currentUser?.right === true) {
+      return tasks; // Return all tasks for users with right: true
+    }
     const userColumns = getUserColumns();
     return tasks.filter((task) =>
       userColumns.some((column) => column.id === task.columnId)
     );
-  }, [tasks, getUserColumns]);
+  }, [tasks, getUserColumns, currentUser]);
 
   const getUserColumnsForBoard = useCallback(
     (boardId) => {
@@ -1762,6 +2028,7 @@ export const DataProvider = ({ children }) => {
     getUserColumnsForBoard,
     getUserTasksForBoard,
     reorderColumns,
+    checkUserRights,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
