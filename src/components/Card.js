@@ -73,19 +73,23 @@ const Card = forwardRef(
               mb={1}
             >
               <Box display="flex" flexDirection="column">
-                <Typography variant="body2" sx={{ flex: 1 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ flex: 1, fontWeight: "bold", fontSize: "1.1rem" }}
+                >
                   {task.content}
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{
                     flex: 1,
-                    display: "-webkit-box", 
-                    WebkitBoxOrient: "vertical", 
-                    WebkitLineClamp: 2,
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 3,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "normal",
+                    fontSize: "0.7rem",
                   }}
                 >
                   {task.description}
