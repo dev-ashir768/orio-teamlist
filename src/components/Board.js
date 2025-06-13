@@ -44,18 +44,15 @@ const Board = React.memo(
     }, [columns]);
 
     const handleTaskClick = useCallback((task) => {
-      console.log("Task clicked:", task);
       setSelectedTask(task);
     }, []);
 
     const handleClosePopup = useCallback(() => {
-      console.log("Closing task popup");
       setSelectedTask(null);
     }, []);
 
     const handleSaveTask = useCallback(
       (updatedTask) => {
-        console.log("Saving task:", updatedTask);
         onUpdateTask(updatedTask.id, updatedTask);
         setSelectedTask(null);
       },
@@ -63,7 +60,6 @@ const Board = React.memo(
     );
 
     const handleAddColumn = useCallback(() => {
-      console.log("Opening add column dialog");
       setIsAddColumnDialogOpen(true);
     }, []);
 
@@ -75,7 +71,6 @@ const Board = React.memo(
           taskIds: [],
           order: sortedColumns.length,
         };
-        console.log("Adding new column:", newColumn);
         onAddColumn(board.id, newColumn);
         setNewColumnTitle("");
         setIsAddColumnDialogOpen(false);
@@ -94,7 +89,6 @@ const Board = React.memo(
           dueDate: null,
           checklist: [],
         };
-        console.log("Adding new task:", newTask);
         onAddTask(columnId, newTask);
       },
       [board.id, onAddTask]
@@ -102,7 +96,6 @@ const Board = React.memo(
 
     const handleDeleteCard = useCallback(
       (columnId, taskId) => {
-        console.log("Deleting task:", { columnId, taskId });
         onDeleteTask(taskId);
       },
       [onDeleteTask]
@@ -110,7 +103,6 @@ const Board = React.memo(
 
     const handleDeleteColumn = useCallback(
       (columnId) => {
-        console.log("Deleting column:", columnId);
         onDeleteColumn(columnId);
       },
       [onDeleteColumn]
@@ -118,42 +110,10 @@ const Board = React.memo(
 
     const handleEditColumnName = useCallback(
       (columnId, newName) => {
-        console.log("Editing column name:", { columnId, newName });
         onUpdateColumn(columnId, { title: newName });
       },
       [onUpdateColumn]
     );
-
-    ////
-
-    /*
-  const onDragEnd = useCallback((result) => {
-    const { source, destination, draggableId, type } = result;
-  
-    if (!destination) {
-      return;
-    }
-  
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    ) {
-      return;
-    }
-  
-    if (type === 'COLUMN') {
-      const newColumnOrder = Array.from(sortedColumns);
-      const [reorderedColumn] = newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, reorderedColumn);
-      const newOrder = newColumnOrder.map((column, index) => ({ id: column.id, order: index }));
-      reorderColumns(board.id, newOrder);
-      return;
-    }
-  
-    moveTask(draggableId, source.droppableId, destination.droppableId, destination.index);
-  }, [moveTask, reorderColumns, board.id, sortedColumns]);
-
-*/
 
     const onDragEnd = useCallback(
       (result) => {
@@ -209,7 +169,6 @@ const Board = React.memo(
       ]
     );
 
-    ///////
 
     const memoizedColumns = useMemo(
       () =>
@@ -217,7 +176,6 @@ const Board = React.memo(
           const columnTasks = tasks.filter(
             (task) => task.columnId === column.id
           );
-          console.log(`Column ${column.id} tasks:`, columnTasks);
           return (
             <Column
               key={column.id}
@@ -246,7 +204,6 @@ const Board = React.memo(
     );
 
     if (!board || columns.length === 0) {
-      console.log("Board or columns not loaded yet");
       return (
         <Box
           sx={{
@@ -305,15 +262,17 @@ const Board = React.memo(
         >
           <DialogTitle>Add New Column</DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Column Title"
-              type="text"
-              fullWidth
-              value={newColumnTitle}
-              onChange={(e) => setNewColumnTitle(e.target.value)}
-            />
+            <Box width={400}>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Column Title"
+                type="text"
+                fullWidth
+                value={newColumnTitle}
+                onChange={(e) => setNewColumnTitle(e.target.value)}
+              />
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setIsAddColumnDialogOpen(false)}>

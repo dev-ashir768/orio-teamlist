@@ -720,11 +720,32 @@ function AppContent() {
                           <IconButton
                             size="small"
                             sx={{ position: "absolute", top: 8, right: 8 }}
+                            onClick={(event) =>
+                              setAnchorEl({
+                                ...anchorEl,
+                                [board.id]: event.currentTarget,
+                              })
+                            }
                           >
-                            <DeleteOutlineOutlined
-                              onClick={() => handleDeleteBoard(board.id)}
-                            />
+                            <MoreVert />
                           </IconButton>
+                          <Menu
+                            anchorEl={anchorEl[board.id]}
+                            open={Boolean(anchorEl[board.id])}
+                            onClose={() =>
+                              setAnchorEl({ ...anchorEl, [board.id]: null })
+                            }
+                          >
+                            <MenuItem
+                              onClick={() => {
+                                handleDeleteBoard(board.id);
+                                setAnchorEl({ ...anchorEl, [board.id]: null });
+                              }}
+                            >
+                              <DeleteOutlineOutlined sx={{ mr: 1 }} />
+                              Delete
+                            </MenuItem>
+                          </Menu>
                           <CardContent>
                             <svg
                               width="80"
@@ -779,30 +800,6 @@ function AppContent() {
               )}
             </Box>
           )}
-
-          {/* {activeSection === "board" && selectedBoard && (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Board
-                key={`${selectedBoard.id}-${Date.now()}`}
-                board={selectedBoard}
-                columns={userColumns.filter(
-                  (c) => c.boardId === selectedBoard.id
-                )}
-                tasks={userTasks.filter((t) => t.boardId === selectedBoard.id)}
-                onSaveBoard={handleSaveBoard}
-                boardMembers={members.filter((m) =>
-                  selectedBoard.members.includes(m.id)
-                )}
-                availableLabels={labels}
-                onAddTask={addTask}
-                onUpdateTask={updateTask}
-                onDeleteTask={deleteTask}
-                onAddColumn={handleAddColumn}
-                onUpdateColumn={handleUpdateColumn}
-                onDeleteColumn={handleDeleteColumn}
-              />
-            </DragDropContext>
-          )} */}
 
           {activeSection === "board" && selectedBoard && (
             <Box

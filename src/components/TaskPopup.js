@@ -24,10 +24,7 @@ import {
   FormControlLabel,
   ListItemSecondaryAction,
 } from "@mui/material";
-import {
-  Close,
-  DeleteTwoTone,
-} from "@mui/icons-material";
+import { Close, DeleteTwoTone } from "@mui/icons-material";
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -177,15 +174,7 @@ function TaskPopup({
   return (
     <StyledDialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <StyledDialogTitle>
-        <StyledTextField
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          variant="standard"
-          fullWidth
-          InputProps={{
-            style: { color: "inherit", fontSize: "inherit" },
-          }}
-        />
+        {taskName}
         <IconButton onClick={onClose} color="inherit">
           <Close />
         </IconButton>
@@ -193,6 +182,21 @@ function TaskPopup({
       <DialogContent>
         <Box display="flex" gap={3}>
           <Box flexGrow={1}>
+            <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+              Task
+            </Typography>
+            <TextField
+              type="text"
+              fullWidth
+              variant="outlined"
+              placeholder="Task"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+              sx={{ mb: 3 }}
+            />
+
+            <Divider sx={{ my: 3 }} />
+
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
               Description
             </Typography>
@@ -250,73 +254,6 @@ function TaskPopup({
               }}
             />
 
-            <Divider sx={{ my: 3 }} />
-
-            <Typography variant="h6" gutterBottom>
-              Checklist
-            </Typography>
-            <Box display="flex" gap={1} mb={2}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Add checklist item"
-                value={newChecklistItem}
-                onChange={(e) => setNewChecklistItem(e.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddChecklistItem}
-              >
-                Add
-              </Button>
-            </Box>
-            <List>
-              {checklist.map((item) => (
-                <ListItem key={item.id}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={item.checked}
-                        onChange={() => handleToggleChecklistItem(item.id)}
-                      />
-                    }
-                    label={item.text}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => handleDeleteChecklistItem(item.id)}
-                    >
-                      <DeleteTwoTone />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-
-            <Divider sx={{ my: 3 }} />
-
-            <Typography variant="h6" gutterBottom>
-              Comments
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Write a comment..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              sx={{ mb: 1 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddComment}
-              sx={{ mb: 3 }}
-            >
-              Add Comment
-            </Button>
 
             <List>
               {comments.map((comment) => (

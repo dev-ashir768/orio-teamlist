@@ -68,6 +68,7 @@ const Column = React.memo(
       console.log(`Adding new card to column ${column.id}`);
       const newTask = {
         content: "New Task",
+        description: "",  
         boardId: boardId,
         columnId: column.id,
         members: [],
@@ -89,7 +90,6 @@ const Column = React.memo(
         sx={{
           p: 2,
           minWidth: 280,
-          // backgroundColor: "rgba(0, 0, 0, 0.05)",
           backgroundColor: "#fff",
           display: "flex",
           flexDirection: "column",

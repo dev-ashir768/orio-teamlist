@@ -15,9 +15,9 @@ import AddMemberPopup from "./AddMemberPopup";
 
 const StyledButton = styled(Button)(({ theme }) => ({
   color: "#fff",
-  backgroundColor: "#0288d1",
+  backgroundColor: "#023250",
   "&:hover": {
-    backgroundColor: "#0277bd",
+    backgroundColor: "#01416E",
   },
   padding: theme.spacing(1, 3),
   borderRadius: "8px",
